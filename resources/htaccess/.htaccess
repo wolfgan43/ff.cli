@@ -1,0 +1,44 @@
+RewriteEngine on
+Options -Indexes +FollowSymLinks -MultiViews
+
+AddType text/cache-manifest .manifest
+AddDefaultCharset UTF-8
+
+### OPTIONAL: htaccess-redirect-http
+### BEGIN http-redirect
+### END http-redirect
+
+### OPTIONAL: htaccess-redirect-https
+### BEGIN https-redirect
+### END https-redirect
+
+### REQUIRE: htaccess-cache
+### BEGIN htaccess-cache
+### END htaccess-cache
+
+### REQUIRE: htaccess-security-authorization
+### BEGIN htaccess-security-authorization
+### END htaccess-security-authorization
+
+<IfModule mod_rewrite.c>
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-l
+   RewriteRule ^(.*) /index.php [L,QSA]
+</IfModule>
+
+### REQUIRE: htaccess-security-default
+### BEGIN htaccess-security-default
+### END htaccess-security-default
+
+### OPTIONAL: htaccess-security-cors
+### BEGIN security-cors
+### END security-cors
+
+### OPTIONAL: htaccess-security-x-frame-options
+### BEGIN x-frame-options
+### END x-frame-options
+
+### OPTIONAL: htaccess-security-content-security-policy
+### BEGIN security-policy
+### END security-policy
