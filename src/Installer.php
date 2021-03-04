@@ -43,6 +43,39 @@ class Installer extends Kernel implements Constant
     private $webServerUid           = null;
     private $respirce_disk_path     = null;
 
+    public static function setup()
+    {
+        Cache::clear();
+
+        $installer = new static();
+
+        App::setup($installer->dirStruct("app"), $installer->disk_path, $installer->webServerUid);
+        Cache::setup($installer->dirStruct("cache"), $installer->disk_path, $installer->webServerUid);
+
+        $installer->indexClasses();
+
+        $installer->makeConfig([]);
+        $installer->makeIndex();
+        $installer->makeHtaccess();
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public static function dumpautoload() : void
+    {
+        $installer = new static();
+
+        Cache::clear();
+
+        $installer->indexClasses();
+    }
+
+    public static function clearcache() : void
+    {
+        Cache::clear();
+    }
+
     public function logo()
     {
         echo "
@@ -63,30 +96,6 @@ class Installer extends Kernel implements Constant
         $this->webServerUid         = (int) shell_exec("id -u " . $web_server_user);
         $this->respirce_disk_path   = dirname(__DIR__);
 
-    }
-
-    public function setup()
-    {
-        Cache::clear();
-
-        App::setup($this->dirStruct("app"), $this->disk_path, $this->webServerUid);
-        Cache::setup($this->dirStruct("cache"), $this->disk_path, $this->webServerUid);
-
-        $this->indexClasses();
-
-        $this->makeConfig([]);
-        $this->makeIndex();
-        $this->makeHtaccess();
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function dumpautoload() : void
-    {
-        Cache::clear();
-
-        $this->indexClasses();
     }
 
     public function helper()

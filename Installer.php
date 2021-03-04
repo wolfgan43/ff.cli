@@ -4,27 +4,27 @@ if (php_sapi_name() !== 'cli') {
     exit;
 }
 
-require dirname(dirname(dirname(__DIR__))) . '/autoload.php';
+require dirname(dirname(__DIR__)) . '/autoload.php';
 
-$app = new \phpformsframework\cli\Installer();
+$installer = new \phpformsframework\cli\Installer();
 
 switch ($argv[1]) {
     case "setup":
-        $app->setup();
+        $installer->setup();
         break;
     case "dumpautoload":
-        $app->logo();
+        $installer->logo();
         echo "  ClearCache...       Done!\n";
         echo "  Indexing Classes... ";
-        $app->dumpautoload();
+        $installer->dumpautoload();
         echo "Done!\n";
         break;
     case "clearcache":
-        $app->logo();
+        $installer->logo();
         echo "  ClearCache...       ";
-        $app->clearCache();
+        $installer->clearCache();
         echo "Done!\n";
         break;
     default:
-        $app->helper();
+        $installer->helper();
 }
