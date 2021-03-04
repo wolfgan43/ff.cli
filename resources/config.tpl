@@ -30,8 +30,8 @@ class Config extends \phpformsframework\libs\Constant
     const TWILIO_SMS_TOKEN          = 'twiliosmstoken';
     const TWILIO_SMS_FROM           = 'twiliosmsfrom';
 
-    const DEBUG                     = false;
-    const DISABLE_CACHE             = false;
+    const DEBUG                     = true;
+    const DISABLE_CACHE             = true;
 
     const API_SERVER                = [];
 }
