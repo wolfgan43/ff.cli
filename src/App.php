@@ -12,7 +12,17 @@ class App implements Constant
 {
     protected const COMPONENT = "app";
 
-    public static function setup(array $structs, string $disk_path, int $web_server_uid)
+    private $disk_path              = null;
+    private $resource_disk_path     = null;
+    private $disk_owner             = null;
+    private $disk_group             = null;
+
+    /**
+     * @param array $structs
+     * @param string $disk_path
+     * @param int|null $web_server_uid
+     */
+    public static function setup(array $structs, string $disk_path, int $web_server_uid = null)
     {
         $app = new static($disk_path, $web_server_uid);
         $app->makeDir($structs);
@@ -21,13 +31,12 @@ class App implements Constant
         $app->makeWelcomePage();
     }
 
-
-    private $disk_path              = null;
-    private $resource_disk_path     = null;
-    private $disk_owner             = null;
-    private $disk_group             = null;
-
-    public function __construct(string $disk_path, int $web_server_uid)
+    /**
+     * App constructor.
+     * @param string $disk_path
+     * @param int|null $web_server_uid
+     */
+    public function __construct(string $disk_path, int $web_server_uid = null)
     {
         $this->disk_path            = $disk_path;
         $this->resource_disk_path   = dirname(__DIR__);
@@ -36,7 +45,10 @@ class App implements Constant
         $this->disk_group           = filegroup($this->disk_path);
     }
 
-    public function makeDir(array $structs)
+    /**
+     * @param array $structs
+     */
+    public function makeDir(array $structs) : void
     {
         foreach ($structs as $key => $struct) {
             if(!empty($struct["virtual"])) {
@@ -52,7 +64,10 @@ class App implements Constant
         }
     }
 
-    public function makeSafeDir(string $key)
+    /**
+     * @param string $key
+     */
+    public function makeSafeDir(string $key) : void
     {
         if(!file_exists($this->resource_disk_path . self::HTACCESS_PATH . DIRECTORY_SEPARATOR . ".htaccess_" . $key)) {
             return;
@@ -69,7 +84,10 @@ class App implements Constant
         }
     }
 
-    public function makeConfig()
+    /**
+     *
+     */
+    public function makeConfig() : void
     {
         $config_path = $this->disk_path . DIRECTORY_SEPARATOR . static::COMPONENT . DIRECTORY_SEPARATOR . "conf";
         if (is_dir($config_path)) {
@@ -82,7 +100,10 @@ class App implements Constant
         }
     }
 
-    public function makeWelcomePage()
+    /**
+     *
+     */
+    public function makeWelcomePage() : void
     {
         $public_path = $this->disk_path . DIRECTORY_SEPARATOR . static::COMPONENT . DIRECTORY_SEPARATOR . "public";
         if (is_dir($public_path)) {
@@ -95,6 +116,10 @@ class App implements Constant
         }
     }
 
+    /**
+     * @param bool $isWritable
+     * @return string
+     */
     private function chmod(bool $isWritable = false) : string
     {
         return ($isWritable

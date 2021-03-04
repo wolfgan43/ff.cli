@@ -24,9 +24,9 @@ class Htaccess
     private $resource_path;
 
     private const TEMPLATE_PREFIX = "htaccess-";
-    
+
     /**
-     * @param string $htaccess_path
+     * @param string $htaccess_disk_path
      * @throws Exception
      */
     public function __construct(string $htaccess_disk_path)
@@ -43,6 +43,9 @@ class Htaccess
         }
     }
 
+    /**
+     * @return string
+     */
     public function read() : string
     {
         return $this->htaccess;
@@ -110,10 +113,8 @@ RULES;
         return $this;
     }
 
-    
-    
-    
     /**
+     * @param string $referer
      * @return self
      */
     public function addToBanlist(string $referer) : self
@@ -145,6 +146,7 @@ RULES;
     }
 
     /**
+     * @param string $referer
      * @return self
      */
     public function removeFromBanlist(string $referer) : self
@@ -167,9 +169,10 @@ RULES;
     }
 
     /**
+     * @param string $domain
      * @return self
      */
-    public function addCorsRule($domain) : self
+    public function addCorsRule(string $domain) : self
     {
         $pattern = '/(?<=### BEGIN security-cors)(?s)(.*?)(?=### END security-cors)/m';
         $cors_string = trim($this->getMatch($pattern, $this->htaccess));
@@ -189,9 +192,10 @@ RULES;
     }
 
     /**
+     * @param string $domain
      * @return self
      */
-    public function removeCorsRule($domain) : self
+    public function removeCorsRule(string $domain) : self
     {
         $pattern = '/(?<=### BEGIN security-cors)(?s)(.*?)(?=### END security-cors)/m';
         $cors_string = trim($this->getMatch($pattern, $this->htaccess));
@@ -212,9 +216,10 @@ RULES;
     }
 
     /**
+     * @param string $domain
      * @return self
      */
-    public function addXFrameOptions($domain) : self
+    public function addXFrameOptions(string $domain) : self
     {
         $pattern = '/(?<=### BEGIN x-frame-options)(?s)(.*?)(?=### END x-frame-options)/m';
         $base_xframe = trim($this->getMatch($pattern, $this->htaccess));
@@ -242,9 +247,10 @@ RULES;
     }
 
     /**
+     * @param string $domain
      * @return self
      */
-    public function removeXFrameOptions($domain) : self
+    public function removeXFrameOptions(string $domain) : self
     {
         $pattern = '/(?<=### BEGIN x-frame-options)(?s)(.*?)(?=### END x-frame-options)/m';
         $base_xframe = trim($this->getMatch($pattern, $this->htaccess));
@@ -264,7 +270,7 @@ RULES;
      * @param string $region_name
      * @return self
      */
-    public function enableRegion($region_name) : self
+    public function enableRegion(string $region_name) : self
     {
         if (in_array($region_name, array_keys($this->availables))) {
             $this->disableRegion($region_name);
@@ -286,7 +292,7 @@ RULES;
      * @param string $region_name
      * @return self
      */
-    public function disableRegion($region_name) : self
+    public function disableRegion(string $region_name) : self
     {
         if (in_array($region_name, array_keys($this->availables))) {
             $pattern = '/(?<=### BEGIN ' . $region_name . ')(?s)(.*?)(?=### END ' . $region_name . ')/m';

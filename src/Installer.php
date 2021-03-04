@@ -1,6 +1,7 @@
 <?php
 namespace phpformsframework\cli;
 
+use Exception;
 use phpformsframework\libs\Kernel;
 use phpformsframework\libs\security\UUID;
 use phpformsframework\libs\storage\FilemanagerFs;
@@ -91,11 +92,12 @@ class Installer extends Kernel implements Constant
     {
         parent::__construct();
 
-        $web_server_user            = shell_exec("ps aux | egrep '([a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx)' | awk '{ print $1}' | uniq | tail -1");
         $this->disk_path            = $this::$Environment::DISK_PATH;
-        $this->webServerUid         = (int) shell_exec("id -u " . $web_server_user);
         $this->respirce_disk_path   = dirname(__DIR__);
-
+        $web_server_user            = @shell_exec("ps aux | egrep '([a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx)' | awk '{ print $1}' | uniq | tail -1");
+        if($web_server_user) {
+            $this->webServerUid     = (int)shell_exec("id -u " . $web_server_user);
+        }
     }
 
     public function helper()
@@ -122,12 +124,10 @@ class Installer extends Kernel implements Constant
      */
     private function indexClasses() : void
     {
-        $app = new Kernel();
-
-        $ff_path = $app::$Environment::LIBS_FF_PATH;
+        $ff_path = $this::$Environment::LIBS_FF_PATH;
         $ff_ns = str_replace("/", "\\", $ff_path);
 
-        $classFinder = new ClassFinder($app::$Environment::DISK_PATH);
+        $classFinder = new ClassFinder($this::$Environment::DISK_PATH);
         $libsClasses = $classFinder->getClassesByNamespace($ff_ns); // retrives all classes for phpformsframework\libs\ namespace
 
         // obtain classes that implements Configurable interface
@@ -137,7 +137,7 @@ class Installer extends Kernel implements Constant
         $files_dumpable = $classFinder->filterByInterface($libsClasses, "phpformsframework\libs\Dumpable");
 
         // open Config.php in phpformsframework\libs\
-        $fileConfig = $app::$Environment::DISK_PATH."/vendor".$ff_path."/src/Config.php";
+        $fileConfig = $this::$Environment::DISK_PATH."/vendor".$ff_path."/src/Config.php";
         $content = file_get_contents($fileConfig);
 
         // replace (if exists) $class_configurable array in Config.php
@@ -183,6 +183,9 @@ class Installer extends Kernel implements Constant
         return $base;
     }
 
+    /**
+     *
+     */
     private function makeIndex()
     {
         $index_file = $this->disk_path . DIRECTORY_SEPARATOR . "index.php";
@@ -191,6 +194,9 @@ class Installer extends Kernel implements Constant
         }
     }
 
+    /**
+     * @param array $config
+     */
     private function makeConfig(array $config)
     {
         if(file_exists($this->disk_path . "/config.php")) {
@@ -213,6 +219,9 @@ class Installer extends Kernel implements Constant
         FilemanagerWeb::filePutContents($this->disk_path . "/config.php", str_replace(self::CONFIG, "null", $content));
     }
 
+    /**
+     * @throws Exception
+     */
     private function makeHtaccess()
     {
         $htaccess_disk_path = $this->disk_path . DIRECTORY_SEPARATOR . ".htaccess";
