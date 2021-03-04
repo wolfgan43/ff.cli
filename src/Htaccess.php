@@ -4,6 +4,7 @@ namespace phpformsframework\cli;
 use Composer\Script\Event;
 use Exception;
 use phpformsframework\libs\storage\FilemanagerFs;
+use phpformsframework\libs\storage\FilemanagerWeb;
 
 /**
  * Class HtaccessManager
@@ -34,7 +35,7 @@ class Htaccess
         if (file_exists($htaccess_disk_path)) {
             $this->resource_path = dirname(__DIR__) . self::HTACCESS_PATH;
             $this->htaccess_path = $htaccess_disk_path;
-            $this->htaccess = file_get_contents($htaccess_disk_path);
+            $this->htaccess = FilemanagerWeb::fileGetContents($htaccess_disk_path);
 
             $this->availables = $this->templates($this->resource_path, self::TEMPLATE_PREFIX);
             $this->required = preg_grep('/### REQUIRE/i', file($htaccess_disk_path));
@@ -127,7 +128,7 @@ RULES;
         }
 
         if (strlen($base_banlist) == 0) {
-            $base_banlist = file_get_contents($this->resource_path . "/htaccess-security-banlist");
+            $base_banlist = FilemanagerWeb::fileGetContents($this->resource_path . "/htaccess-security-banlist");
             $banlist_item = "\n\tRewriteCond %{HTTP_REFERER} {$referer} [NC]\n\t";
             $subpattern = '/(?<=### BEGIN banlist-items)(?s)(.*?)(?=### END banlist-items)/m';
             $base_banlist = preg_replace($subpattern, $banlist_item, $base_banlist);
@@ -225,7 +226,7 @@ RULES;
         $base_xframe = trim($this->getMatch($pattern, $this->htaccess));
 
         if (strlen($base_xframe) == 0) {
-            $base_xframe = "\n".trim(file_get_contents($this->resource_path . "/htaccess-x-frame-options"))."\n";
+            $base_xframe = "\n".trim(FilemanagerWeb::fileGetContents($this->resource_path . "/htaccess-x-frame-options"))."\n";
         }
 
         $subpattern = '/(?<=### BEGIN x-frame-items)(?s)(.*?)(?=### END x-frame-items)/m';
@@ -275,7 +276,7 @@ RULES;
         if (in_array($region_name, array_keys($this->availables))) {
             $this->disableRegion($region_name);
             $pattern = '/(?<=### BEGIN ' . $region_name . ')(?s)(.*?)(?=### END ' . $region_name . ')/m';
-            $replace = "\n".trim(file_get_contents($this->resource_path . "/" . $region_name))."\n";
+            $replace = "\n".trim(FilemanagerWeb::fileGetContents($this->resource_path . "/" . $region_name))."\n";
             $this->htaccess = preg_replace($pattern, str_replace(
                 ['$0', '$1', '$2', '$3', '$4', '$5', '$6', '$7', '$8', '$9'],
                 ['\$0', '\$1', '\$2', '\$3', '\$4', '\$5', '\$6', '\$7', '\$8', '\$9'],
@@ -307,7 +308,7 @@ RULES;
 
     public function save() : void
     {
-        file_put_contents($this->htaccess_path, $this->htaccess);
+        FilemanagerWeb::filePutContents($this->htaccess_path, $this->htaccess);
     }
 
     // TEST METHODS

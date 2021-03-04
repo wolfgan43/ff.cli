@@ -86,35 +86,19 @@ class ClassFinder
      */
     public function filterByInterface(array $allClasses, string $interface) : array
     {
+        ini_set('memory_limit', '256M');
         $allClasses = array_diff($allClasses, self::$classExclusions);
-
         if ($interface) {
             $filteredResult = array();
-            $descendants = array();
-
             foreach ($allClasses as $class) {
                 $classImpl = new ReflectionClass($class);
 
                 $implCollection = (array)$classImpl->getInterfaceNames();
-
-                if (in_array($interface, $implCollection)) {
-                    $tmp = $classImpl;
-                    while ($tmp = $tmp->getParentClass()) {
-                        if ($tmp) {
-                            if (in_array($interface, $tmp->getInterfaceNames())) {
-                                if (!in_array($tmp->getName(), $descendants)) {
-                                    $descendants[] = $tmp->getName();
-                                }
-                            }
-                        }
-                    }
-
+                if(in_array($interface, $implCollection)) {
                     $classId = strtolower($classImpl->getShortName());
                     $filteredResult[$classId] = $classImpl->getName();
                 }
             }
-
-            $filteredResult = array_diff($filteredResult, $descendants);
 
             return $filteredResult;
         }
