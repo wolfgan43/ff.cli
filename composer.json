@@ -1,0 +1,40 @@
+{
+    "name": "phpformsframework/cli",
+    "description": "php FormsFramework CLI",
+    "license": "LGPL-3.0",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Alessandro Stucchi",
+            "email": "wolfgan@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "apcu-autoloader": true
+    },
+    "require": {
+        "php": "^7.2",
+        "ext-json" : "*"
+    },
+    "require-dev": {
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "phpformsframework\\cli\\" : "src/"
+        }
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "\\phpformsframework\\cli\\Installer::setup"
+        ],
+        "post-autoload-dump": [
+            "\\phpformsframework\\cli\\Installer::dumpautoload"
+        ]
+    }
+}
