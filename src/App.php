@@ -92,7 +92,7 @@ class App implements Constant
         $config_path = $this->disk_path . DIRECTORY_SEPARATOR . static::COMPONENT . DIRECTORY_SEPARATOR . "conf";
         if (is_dir($config_path)) {
             $config_file = $config_path . DIRECTORY_SEPARATOR . "config.xml";
-            if(!file_exists($config_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "config.tpl", $config_file)) {
+            if(!file_exists($config_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "config.xml", $config_file)) {
                 echo "Error: " . $config_file . " unable to write!\n";
             }
         } else {
