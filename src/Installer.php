@@ -90,13 +90,15 @@ class Installer extends Kernel implements Constant
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(Config::class);
 
         $this->disk_path            = $this::$Environment::DISK_PATH;
         $this->respirce_disk_path   = dirname(__DIR__);
-        $web_server_user            = @shell_exec("ps aux | egrep '([a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx)' | awk '{ print $1}' | uniq | tail -1");
-        if($web_server_user) {
-            $this->webServerUid     = (int)shell_exec("id -u " . $web_server_user);
+        if(PHP_OS == "Linux") {
+            $web_server_user = @shell_exec("ps aux | egrep '([a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx)' | awk '{ print $1}' | uniq | tail -1");
+            if ($web_server_user) {
+                $this->webServerUid = (int)shell_exec("id -u " . $web_server_user);
+            }
         }
     }
 

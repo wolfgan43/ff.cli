@@ -65,6 +65,25 @@ class App implements Constant
     }
 
     /**
+     * @param array $structs
+     */
+    public function makeThemeDir(array $structs) : void
+    {
+        foreach ($structs as $key => $struct) {
+            if(!empty($struct["virtual"])) {
+                continue;
+            }
+
+            FilemanagerFs::makeDir($struct["path"], $this->disk_path, $this->chmod($struct["writable"] ?? false));
+
+            chown($this->disk_path . $struct["path"], $this->disk_owner);
+            chgrp($this->disk_path . $struct["path"], $this->disk_group);
+
+            $this->makeSafeDir($key);
+        }
+    }
+
+    /**
      * @param string $key
      */
     public function makeSafeDir(string $key) : void
