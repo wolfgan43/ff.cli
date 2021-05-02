@@ -51,14 +51,14 @@ class App implements Constant
     public function makeDir(array $structs) : void
     {
         foreach ($structs as $key => $struct) {
-            if(!empty($struct["virtual"])) {
+            if (!empty($struct["virtual"])) {
                 continue;
             }
 
             FilemanagerFs::makeDir($struct["path"], $this->disk_path, $this->chmod($struct["writable"] ?? false));
 
-            chown($this->disk_path . $struct["path"], $this->disk_owner);
-            chgrp($this->disk_path . $struct["path"], $this->disk_group);
+            @chown($this->disk_path . $struct["path"], $this->disk_owner);
+            @chgrp($this->disk_path . $struct["path"], $this->disk_group);
 
             $this->makeSafeDir($key);
         }
@@ -70,14 +70,14 @@ class App implements Constant
     public function makeThemeDir(array $structs) : void
     {
         foreach ($structs as $key => $struct) {
-            if(!empty($struct["virtual"])) {
+            if (!empty($struct["virtual"])) {
                 continue;
             }
 
             FilemanagerFs::makeDir($struct["path"], $this->disk_path, $this->chmod($struct["writable"] ?? false));
 
-            chown($this->disk_path . $struct["path"], $this->disk_owner);
-            chgrp($this->disk_path . $struct["path"], $this->disk_group);
+            @chown($this->disk_path . $struct["path"], $this->disk_owner);
+            @chgrp($this->disk_path . $struct["path"], $this->disk_group);
 
             $this->makeSafeDir($key);
         }
@@ -88,7 +88,7 @@ class App implements Constant
      */
     public function makeSafeDir(string $key) : void
     {
-        if(!file_exists($this->resource_disk_path . self::HTACCESS_PATH . DIRECTORY_SEPARATOR . ".htaccess_" . $key)) {
+        if (!file_exists($this->resource_disk_path . self::HTACCESS_PATH . DIRECTORY_SEPARATOR . ".htaccess_" . $key)) {
             return;
         }
 
@@ -111,7 +111,7 @@ class App implements Constant
         $config_path = $this->disk_path . DIRECTORY_SEPARATOR . static::COMPONENT . DIRECTORY_SEPARATOR . "conf";
         if (is_dir($config_path)) {
             $config_file = $config_path . DIRECTORY_SEPARATOR . "config.xml";
-            if(!file_exists($config_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "config.xml", $config_file)) {
+            if (!file_exists($config_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "config.xml", $config_file)) {
                 echo "Error: " . $config_file . " unable to write!\n";
             }
         } else {
@@ -127,7 +127,7 @@ class App implements Constant
         $public_path = $this->disk_path . DIRECTORY_SEPARATOR . static::COMPONENT . DIRECTORY_SEPARATOR . "public";
         if (is_dir($public_path)) {
             $public_file = $public_path . DIRECTORY_SEPARATOR . "index.php";
-            if(!file_exists($public_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "public.tpl", $public_file)) {
+            if (!file_exists($public_file) && !FilemanagerFs::copy($this->resource_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "public.tpl", $public_file)) {
                 echo "Error: " . $public_file . " unable to write!\n";
             }
         } else {
