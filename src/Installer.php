@@ -218,7 +218,7 @@ class Installer extends Kernel implements Constant
             FilemanagerWeb::fileGetContents($this->respirce_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "config.tpl")
         );
 
-        FilemanagerWeb::filePutContents($this->disk_path . "/config.php", str_replace(self::CONFIG, "null", $content));
+        FilemanagerFs::filePutContents($this->disk_path . "/config.php", str_replace(self::CONFIG, "null", $content));
     }
 
     /**
