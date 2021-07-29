@@ -14,7 +14,6 @@ class ClassFinder
 
     private static $composer = null;
     private static $classes  = [];
-    private static $basepath;
 
     private static $classExclusions = [
         "\phpformsframework\libs\security\widgets\Recover",
@@ -30,7 +29,6 @@ class ClassFinder
         self::$composer = null;
         self::$classes  = [];
 
-        self::$basepath = $basepath;
         self::$composer = require($basepath . self::COMPOSER_PATH);
 
         if (false === empty(self::$composer)) {
@@ -86,23 +84,35 @@ class ClassFinder
      */
     public function filterByInterface(array $allClasses, string $interface) : array
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '296M');
         $allClasses = array_diff($allClasses, self::$classExclusions);
         if ($interface) {
             $filteredResult = array();
             foreach ($allClasses as $class) {
-                $classImpl = new ReflectionClass($class);
-
-                $implCollection = (array)$classImpl->getInterfaceNames();
-                if(in_array($interface, $implCollection)) {
-                    $classId = strtolower($classImpl->getShortName());
-                    $filteredResult[$classId] = $classImpl->getName();
-                }
+                $this->filterResult($class, $interface, $filteredResult);
             }
 
             return $filteredResult;
         }
 
         return [];
+    }
+
+    /**
+     * @param string $class
+     * @param string $interface
+     * @param array $filteredResult
+     * @throws ReflectionException
+     */
+    private function filterResult(string $class, string $interface, array &$filteredResult)
+    {
+        $classImpl = new ReflectionClass($class);
+
+        $implCollection = (array)$classImpl->getInterfaceNames();
+        if (in_array($interface, $implCollection)) {
+            $classId = strtolower($classImpl->getShortName());
+            $filteredResult[$classId] = $classImpl->getName();
+        }
+        unset($classImpl, $implCollection);
     }
 }
