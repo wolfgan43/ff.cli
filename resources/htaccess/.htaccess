@@ -1,5 +1,5 @@
 RewriteEngine on
-Options -Indexes +FollowSymLinks -MultiViews
+#Options -Indexes +FollowSymLinks -MultiViews
 
 AddType text/cache-manifest .manifest
 AddDefaultCharset UTF-8
