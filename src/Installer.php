@@ -14,6 +14,7 @@ use ReflectionException;
  */
 class Installer extends Kernel implements Constant
 {
+    private const NAMESPACE         = "phpformsframework\libs";
     private const VERSION           = "1.0";
     private const CONFIG            = [
         "'appid'",
@@ -94,7 +95,7 @@ class Installer extends Kernel implements Constant
 
         $this->disk_path            = $this::$Environment::DISK_PATH;
         $this->respirce_disk_path   = dirname(__DIR__);
-        if(PHP_OS == "Linux") {
+        if (PHP_OS == "Linux") {
             $web_server_user = @shell_exec("ps aux | egrep '([a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx)' | awk '{ print $1}' | uniq | tail -1");
             if ($web_server_user) {
                 $this->webServerUid = (int)shell_exec("id -u " . $web_server_user);
@@ -126,20 +127,17 @@ class Installer extends Kernel implements Constant
      */
     private function indexClasses() : void
     {
-        $ff_path = $this::$Environment::LIBS_FF_PATH;
-        $ff_ns = str_replace("/", "\\", $ff_path);
-
         $classFinder = new ClassFinder($this::$Environment::DISK_PATH);
-        $libsClasses = $classFinder->getClassesByNamespace($ff_ns); // retrives all classes for phpformsframework\libs\ namespace
+        $libsClasses = $classFinder->getClassesByNamespace(self::NAMESPACE); // retrives all classes for phpformsframework\libs namespace
 
         // obtain classes that implements Configurable interface
-        $files_configurable = $classFinder->filterByInterface($libsClasses, "phpformsframework\libs\Configurable");
+        $files_configurable = $classFinder->filterByInterface($libsClasses, self::NAMESPACE . "\Configurable");
 
         // obtain classes that implements Configurable Dumpable
-        $files_dumpable = $classFinder->filterByInterface($libsClasses, "phpformsframework\libs\Dumpable");
+        $files_dumpable = $classFinder->filterByInterface($libsClasses, self::NAMESPACE . "\Dumpable");
 
         // open Config.php in phpformsframework\libs\
-        $fileConfig = $this::$Environment::DISK_PATH."/vendor".$ff_path."/src/Config.php";
+        $fileConfig = $this::$Environment::FRAMEWORK_DISK_PATH . "/src/Config.php";
         $content = file_get_contents($fileConfig);
 
         // replace (if exists) $class_configurable array in Config.php
@@ -191,26 +189,27 @@ class Installer extends Kernel implements Constant
     private function makeIndex()
     {
         $index_file = $this->disk_path . DIRECTORY_SEPARATOR . "index.php";
-        if(!FilemanagerFs::copy($this->respirce_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "index.tpl", $index_file)) {
+        if (!FilemanagerFs::copy($this->respirce_disk_path . self::RESOURCE_PATH . DIRECTORY_SEPARATOR . "index.tpl", $index_file)) {
             echo "Error: " . $index_file . " unable to write!\n";
         }
     }
 
     /**
      * @param array $config
+     * @throws \phpformsframework\libs\Exception
      */
     private function makeConfig(array $config)
     {
-        if(file_exists($this->disk_path . "/config.php")) {
+        if (file_exists($this->disk_path . "/config.php")) {
             return;
         }
 
         // Reading App NAME
-        $cArr       = FilemanagerWeb::fileGetContentsJson($this->disk_path . DIRECTORY_SEPARATOR . "composer.json");
-        $appName    = str_replace("/", "_", $cArr->name);
+        $cArr               = FilemanagerWeb::fileGetContentsJson($this->disk_path . DIRECTORY_SEPARATOR . "composer.json");
+        $appName            = str_replace("/", "_", $cArr->name);
 
-        $config["appid"] = UUID::v4();
-        $config["appname"] = $appName;
+        $config["appid"]    = UUID::v4();
+        $config["appname"]  = $appName;
 
         $content = str_replace(
             array_keys($config),
