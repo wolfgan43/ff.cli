@@ -1,5 +1,5 @@
 <?php
-class Config extends \phpformsframework\libs\Constant
+class Config extends \ff\libs\Constant
 {
     const APPID                     = 'appid';
     const APPNAME                   = 'appname';

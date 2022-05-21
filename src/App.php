@@ -1,12 +1,11 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
-use phpformsframework\libs\Kernel;
-use phpformsframework\libs\storage\FilemanagerFs;
+use ff\libs\storage\FilemanagerFs;
 
 /**
  * Class AppBuilder
- * @package phpformsframework\cli
+ * @package ff\cli
  */
 class App implements Constant
 {

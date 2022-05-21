@@ -1,7 +1,7 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
-use phpformsframework\libs\cache\Buffer;
+use ff\libs\cache\Buffer;
 
 class Cache extends App
 {

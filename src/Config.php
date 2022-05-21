@@ -1,7 +1,7 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
-class Config extends \phpformsframework\libs\Constant
+class Config extends \ff\libs\Constant
 {
     const MEMORY_LIMIT = "256M";
 }

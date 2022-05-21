@@ -1,5 +1,5 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
 interface Constant
 {

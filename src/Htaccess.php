@@ -1,13 +1,13 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
-use phpformsframework\libs\storage\FilemanagerFs;
+use ff\libs\storage\FilemanagerFs;
 use Composer\Script\Event;
 use Exception;
 
 /**
  * Class HtaccessManager
- * @package phpformsframework\cli
+ * @package ff\cli
  */
 class Htaccess
 {

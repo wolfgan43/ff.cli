@@ -1,20 +1,20 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
 use Exception;
-use phpformsframework\libs\Kernel;
-use phpformsframework\libs\security\UUID;
-use phpformsframework\libs\storage\FilemanagerFs;
-use phpformsframework\libs\storage\FilemanagerWeb;
+use ff\libs\Kernel;
+use ff\libs\security\UUID;
+use ff\libs\storage\FilemanagerFs;
+use ff\libs\storage\FilemanagerWeb;
 use ReflectionException;
 
 /**
  * Class setup
- * @package phpformsframework\cli
+ * @package ff\cli
  */
 class Installer extends Kernel implements Constant
 {
-    private const NAMESPACE         = "phpformsframework\libs";
+    private const NAMESPACE         = "ff\libs";
     private const VERSION           = "1.0";
     private const CONFIG            = [
         "'appid'",
@@ -128,7 +128,7 @@ class Installer extends Kernel implements Constant
     private function indexClasses() : void
     {
         $classFinder = new ClassFinder($this::$Environment::DISK_PATH);
-        $libsClasses = $classFinder->getClassesByNamespace(self::NAMESPACE); // retrives all classes for phpformsframework\libs namespace
+        $libsClasses = $classFinder->getClassesByNamespace(self::NAMESPACE); // retrives all classes for ff\libs namespace
 
         // obtain classes that implements Configurable interface
         $files_configurable = $classFinder->filterByInterface($libsClasses, self::NAMESPACE . "\Configurable");
@@ -136,7 +136,7 @@ class Installer extends Kernel implements Constant
         // obtain classes that implements Configurable Dumpable
         $files_dumpable = $classFinder->filterByInterface($libsClasses, self::NAMESPACE . "\Dumpable");
 
-        // open Config.php in phpformsframework\libs\
+        // open Config.php in ff\libs\
         $fileConfig = $this::$Environment::FRAMEWORK_DISK_PATH . "/src/Config.php";
         $content = file_get_contents($fileConfig);
 
@@ -196,7 +196,7 @@ class Installer extends Kernel implements Constant
 
     /**
      * @param array $config
-     * @throws \phpformsframework\libs\Exception
+     * @throws \ff\libs\Exception
      */
     private function makeConfig(array $config)
     {

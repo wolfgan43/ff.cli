@@ -26,15 +26,15 @@
     },
     "autoload": {
         "psr-4": {
-            "phpformsframework\\cli\\" : "src/"
+            "ff\\cli\\" : "src/"
         }
     },
     "scripts": {
         "post-update-cmd": [
-            "\\phpformsframework\\cli\\Installer::setup"
+            "\\ff\\cli\\Installer::setup"
         ],
         "post-autoload-dump": [
-            "\\phpformsframework\\cli\\Installer::dumpautoload"
+            "\\ff\\cli\\Installer::dumpautoload"
         ]
     }
 }

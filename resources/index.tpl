@@ -21,7 +21,7 @@ require_once("vendor/autoload.php");
 */
 require_once("config.php");
 
-$app = new \phpformsframework\libs\Kernel(Config::class);
+$app = new \ff\libs\Kernel(Config::class);
 $app->run();
 
 exit;

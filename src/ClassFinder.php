@@ -1,5 +1,5 @@
 <?php
-namespace phpformsframework\cli;
+namespace ff\cli;
 
 use ReflectionClass;
 use ReflectionException;
@@ -16,8 +16,8 @@ class ClassFinder
     private static $classes  = [];
 
     private static $classExclusions = [
-        "\phpformsframework\libs\security\widgets\Recover",
-        "\phpformsframework\libs\tpl\adapters\ViewSmarty"
+        "\ff\libs\security\widgets\Recover",
+        "\ff\libs\tpl\adapters\ViewSmarty"
     ];
 
     /**
