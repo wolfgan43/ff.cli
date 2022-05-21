@@ -1,5 +1,5 @@
 {
-    "name": "phpformsframework/cli",
+    "name": "ff/cli",
     "description": "php FormsFramework CLI",
     "license": "LGPL-3.0",
     "type": "library",
