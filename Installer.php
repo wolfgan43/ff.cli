@@ -6,7 +6,7 @@ if (php_sapi_name() !== 'cli') {
 
 require dirname(dirname(__DIR__)) . '/autoload.php';
 
-$installer = new \phpformsframework\cli\Installer();
+$installer = new \ff\cli\Installer();
 
 switch ($argv[1]) {
     case "setup":
