@@ -127,7 +127,7 @@ RULES;
             return $this;
         }
 
-        if (strlen($base_banlist) == 0) {
+        if (empty($base_banlist)) {
             $base_banlist = FilemanagerFs::fileGetContents($this->resource_path . "/htaccess-security-banlist");
             $banlist_item = "\n\tRewriteCond %{HTTP_REFERER} {$referer} [NC]\n\t";
             $subpattern = '/(?<=### BEGIN banlist-items)(?s)(.*?)(?=### END banlist-items)/m';
@@ -177,7 +177,7 @@ RULES;
     {
         $pattern = '/(?<=### BEGIN security-cors)(?s)(.*?)(?=### END security-cors)/m';
         $cors_string = trim($this->getMatch($pattern, $this->htaccess));
-        if (strlen($cors_string) == 0) {
+        if (empty($cors_string)) {
             $cors_string = "\nHeader add Access-Control-Allow-Origin '".$domain."'\n";
             $this->htaccess = preg_replace($pattern, $cors_string, $this->htaccess);
         } else {
@@ -200,7 +200,7 @@ RULES;
     {
         $pattern = '/(?<=### BEGIN security-cors)(?s)(.*?)(?=### END security-cors)/m';
         $cors_string = trim($this->getMatch($pattern, $this->htaccess));
-        if (strlen($cors_string) > 0) {
+        if (!empty($cors_string)) {
             $subpattern = '/(?<=\nHeader add Access-Control-Allow-Origin \')(?s)(.*?)(?=\'\n)/m';
             $domains = explode("|", trim($this->getMatch($subpattern, $this->htaccess)));
             if (false !== $key = array_search($domain, $domains)) {
@@ -226,7 +226,7 @@ RULES;
         $pattern = '/(?<=### BEGIN x-frame-options)(?s)(.*?)(?=### END x-frame-options)/m';
         $base_xframe = trim($this->getMatch($pattern, $this->htaccess));
 
-        if (strlen($base_xframe) == 0) {
+        if (empty($base_xframe)) {
             $base_xframe = "\n".trim(FilemanagerFs::fileGetContents($this->resource_path . "/htaccess-x-frame-options"))."\n";
         }
 
@@ -234,7 +234,7 @@ RULES;
         $optionlist = trim($this->getMatch($subpattern, $base_xframe));
 
         $xframe_item = "\n\tHeader always set X-Frame-Options {$domain}";
-        if (strlen($optionlist) == 0) {
+        if (empty($optionlist)) {
             $optionlist .= $xframe_item;
         } else {
             if (false !== strpos($optionlist, "Header always set X-Frame-Options {$domain}")) {
@@ -260,7 +260,7 @@ RULES;
         $subpattern = '/(?<=### BEGIN x-frame-items)(?s)(.*?)(?=### END x-frame-items)/m';
         $optionlist = trim($this->getMatch($subpattern, $base_xframe));
 
-        if (strlen($optionlist) == 0) {
+        if (empty($optionlist)) {
             return $this;
         }
 

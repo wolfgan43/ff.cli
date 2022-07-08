@@ -85,3 +85,18 @@
 # Since we`re sending far-future expires, we dont need ETags for static content.
 # developer.yahoo.com/performance/rules.html#etags
 FileETag None
+
+# Deny access to filenames starting with dot(.)
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to directories starting with dot(.)
+RedirectMatch 403 /\.[^\/]+
+
+# Deny access to files by extensions
+<FilesMatch "\.(ini|psd|log|sh|xml|map|sql|json)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
