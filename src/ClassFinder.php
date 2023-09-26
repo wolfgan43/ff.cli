@@ -108,7 +108,7 @@ class ClassFinder
     {
         $classImpl = new ReflectionClass($class);
 
-        $implCollection = (array)$classImpl->getInterfaceNames();
+        $implCollection = $classImpl->getInterfaceNames();
         if (in_array($interface, $implCollection)) {
             $classId = strtolower($classImpl->getShortName());
             $filteredResult[$classId] = $classImpl->getName();

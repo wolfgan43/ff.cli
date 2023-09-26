@@ -16,7 +16,7 @@ class Config extends \ff\libs\Constant
 
     const SMTP_DRIVER               = 'smtp';
     const SMTP_HOST                 = 'localhost';
-    const SMTP_AUTH                 = false;
+    const SMTP_AUTH                 = true;
     const SMTP_USER                 = 'smtpuser';
     const SMTP_SECRET               = 'smtpsecret';
     const SMTP_PORT                 = '1025';
@@ -30,8 +30,18 @@ class Config extends \ff\libs\Constant
     const TWILIO_SMS_TOKEN          = 'twiliosmstoken';
     const TWILIO_SMS_FROM           = 'twiliosmsfrom';
 
+    const FIREBASE_PUSH_APY_KEY     = '';
+
     const DEBUG                     = true;
     const DISABLE_CACHE             = true;
 
+    const LOCALE_ACCEPTED_LANGS     = ["it"];
+    const LOCALE_LANG_CODE          = "it";
+    const LOCALE_COUNTRY_CODE       = "IT";
+    const LOCALE_TIME_ZONE          = "Europe/Rome";
+    const LOCALE_TIME_LOC           = "+2000";
+
+    const API_SIGNATURE             = null;
+    const API_ISSUER                = null;
     const API_SERVER                = [];
 }

@@ -100,3 +100,8 @@ RedirectMatch 403 /\.[^\/]+
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+<FilesMatch "^sitemap.*\.xml$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>

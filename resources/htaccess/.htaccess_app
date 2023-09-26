@@ -3,3 +3,8 @@
 AddHandler cgi-script .php .pl .jsp .asp .sh .cgi
 Options -ExecCGI
 Options -Indexes
+
+<Files "versions.json">
+    Order allow,deny
+    Allow from all
+</Files>
